@@ -1,4 +1,4 @@
-![[/assets/Gemini_Generated_Image_24zl7a24zl7a24zl.png]]
+![portada](./assets/Gemini_Generated_Image_24zl7a24zl7a24zl.png)
 # 🍎 Fruit
 
 **Por PanTrO**
@@ -24,7 +24,7 @@ _(Aquí explico rápido los _flags_ principales: `-p 0-65535` para escanear _tod
 
 **Resultados del Nmap (¡Mirad qué bonito queda el informe!):**
 
-![[/assets/informe.png]]
+![informe](./assets/informe.png)
 
 Como veis en la captura, el escaneo nos dio dos puntos de entrada:
 
@@ -41,7 +41,7 @@ Me metí en la web y... decepción. Solo había una imagen de fondo y un buscado
 
 Necesitaba descubrir directorios ocultos, así que lancé `gobuster` y `ffuf`. El primero me dio una pista clave: un archivo llamado `fruit.php`.
 
-![[/assets/gobuster.png]]
+![gobuster](./assets/gobuster.png)
 
 Fui corriendo a visitarlo, pero la página estaba en blanco. Lo sospechoso era que tenía un `size = 1`. ¡1 byte! Eso es la señal clásica en CTFs de que el archivo PHP está esperando un parámetro (una variable en la URL) para hacer algo, pero si no se lo das, se queda mudo. Pensé inmediatamente en un ataque **LFI (Local File Inclusion)**.
 
@@ -58,11 +58,11 @@ _(Usé `-fs 1` para filtrar todas las respuestas vacías de 1 byte y quedarme so
 
 ¡Y funcionó! El `ffuf` encontró el parámetro `file`. Probé la ruta clásica en el navegador: `http://192.168.1.15/fruits.php?file=/etc/passwd` y... ¡BINGO!
 
-![[/assets/LFI.png]]
+![LFI](./assets/LFI.png)
 
 Ahí lo tenéis. No solo confirmamos LFI, sino que encontramos un usuario con bash: **bananaman (UID 1001)**. Ya teníamos nombre, ahora necesitábamos la contraseña.
 
-![[/assets/passwd.png]]
+![paswwd](./assets/passwd.png)
 ---
 
 ## Fase 3: Intrusión. Rompiendo la cerradura SSH.
@@ -77,7 +77,7 @@ hydra -l bananaman -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.15
 ```
 
 No hubo que esperar mucho. En unos minutos, `hydra` encontró la contraseña de `bananaman`. ¡Estábamos dentro!
-![[/assets/hydra2.png]]
+![hydra](./assets/hydra2.png)
 
 ---
 
@@ -87,7 +87,7 @@ Ya con una TTY real vía SSH como `bananaman`, tocaba el asalto final. El objeti
 
 Lo primero que pruebo _siempre_ en estos casos es `sudo -l`. Es el comando que te dice qué puedes ejecutar como superusuario sin saber la contraseña. Y la suerte estuvo de mi lado:
 
-![[/assets/sudo-l.png]]
+![sudo](./assets/sudo-l.png)
 
 Como veis, `bananaman` podía ejecutar `/usr/bin/find` como root sin contraseña (`NOPASSWD`). Esto es un error de configuración de manual y la clave de la escalada.
 
@@ -112,6 +112,6 @@ Bash
 cat /home/bananaman/user.txt /root/root.txt
 ```
 
-![[/assets/root2.png]]
+![fin](./assets/root2.png)
 
 ¡Y eso es todo! Una máquina genial para practicar LFI y recordar que una mala configuración de `sudo` puede ser el fin de tu servidor. ¡Espero que os haya gustado el write-up!
