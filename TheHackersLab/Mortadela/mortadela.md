@@ -34,7 +34,7 @@ nmap --stats-every=5s -p 0-65535 --open --min-rate=5000 -T5 -A -sV -Pn -n -v 192
 - **Puerto 3306 (MariaDB):** ¡Error crítico de configuración! Una base de datos expuesta a internet es una invitación formal a entrar. 🚩
     
 
-![nmap](./assets/nmap 1.png)
+![nmap](./assets/nmap.png)
 
 ---
 
@@ -49,7 +49,7 @@ ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/combined_directories
 
 Encontramos `/wordpress/`. Al ser un CMS, lo primero es identificar usuarios válidos. Usé el módulo de enumeración de `wpscan`:
 
-![ffuf](./assets/ffuf 1.png)
+![ffuf](./assets/ffuf.png)
 
 ```Bash
 wpscan --url [http://192.168.1.19/wordpress](http://192.168.1.19/wordpress) --enumerate u
@@ -76,7 +76,7 @@ Si el puerto 3306 estaba abierto, era muy probable que el usuario `root` de la b
 hydra -l root -P /usr/share/wordlists/rockyou.txt 192.168.1.19 mysql
 ```
 
-![hydra](./assets/hydrasqlroot 1.png)
+![hydra](./assets/hydrasqlroot.png)
 
 Obtuve la contraseña de `root` antes de que `wpscan` terminara. Al intentar entrar desde mi Kali, me saltó el error `TLS/SSL error: SSL is required`. Como el servidor no lo soportaba, forcé la conexión en texto plano:
 
@@ -97,8 +97,8 @@ select * from usuarios;
 
 Encontré el usuario **mortadela** y su contraseña. Debido a la tendencia de los usuarios a reutilizar credenciales, probé a entrar por **SSH** con esos datos. ¡Bingo! Acceso inicial conseguido.
 
-![sql1](./assets/sql1 1.png)
-![sql2](./assets/sql2 1.png)
+![sql1](./assets/sql1.png)
+![sql2](./assets/sql2.png)
 
 ---
 
