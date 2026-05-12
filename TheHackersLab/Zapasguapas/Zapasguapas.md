@@ -22,7 +22,7 @@ nmap --stats-every=5s -p 0-65535 --open --min-rate=5000 -T5 -A -sT -Pn -n -v 192
 
 - **80/tcp (HTTP):** Apache httpd 2.4.57.
 
-![nmap](./assets/[nmap.png)
+![nmap](./assets/nmap.png)
 
 ---
 
