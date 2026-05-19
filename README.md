@@ -1,7 +1,7 @@
 ![portada](./TheHackersLab/Fruits/assets/Gemini_Generated_Image_6ackhb6ackhb6ack.png)
 # 🛡️ PanTrO's Pentesting & CTF Labs 🛡️
 
-¡Bienvenidos a mi laboratorio personal de seguridad! Soy **Gonzalo**, un apasionado de la ciberseguridad y administrador de sistemas IT que actualmente se encuentra profundizando en el mundo del Red Teaming mientras curso un Máster en Ciberseguridad.
+¡Bienvenidos a mi laboratorio personal de seguridad! Soy **PanTrO**, un apasionado de la ciberseguridad y administrador de sistemas IT que actualmente se encuentra profundizando en el mundo del Red Teaming mientras curso un Máster en Ciberseguridad.
 
 Este repositorio es mi "bitácora de batalla", donde documento el proceso detallado (write-ups) de las máquinas que voy vulnerando en plataformas como **TheHackersLab**, **Dockerlabs** y entornos locales.
 
