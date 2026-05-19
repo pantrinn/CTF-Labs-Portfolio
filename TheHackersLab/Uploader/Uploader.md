@@ -158,7 +158,7 @@ function printit ($string) {
 
 2. **Ejecución:** Cargué el script final a través del formulario de subida e invoqué el recurso directamente desde la ruta descubierta (`http://192.168.1.13/uploads/test.php`). Al interpretar el código, el servidor Apache nos devolvió una sesión interactiva, obteniendo acceso inicial bajo el contexto del usuario de servicio `www-data`.
 
-![3](./assets/Screenshot_2026-05-19_19-56-19 1.png)
+![3](./assets/Screenshot_2026-05-19_19-56-19.png)
 
 ## Fase 4: Movimiento Lateral. El secreto del operador
 
@@ -173,13 +173,14 @@ find / -name "*.zip" -type f 2>/dev/null
 
 **Resultado:** El rastreador localizó el contenedor en la ruta `/srv/secret/File.zip`.
 
-![4](./assets/Screenshot_2026-05-19_20-10-57.png
+![4](./assets/Screenshot_2026-05-19_20-10-57.png)
+
 ### 🛰️ Exfiltración y Criptoanálisis del Contenedor
 
 Para trabajar con total comodidad y evitar la inestabilidad de la shell interactiva, monté un servicio web temporal con Python en la máquina víctima para descargar el botín de forma local en mi entorno de auditoría:
 
 - **Víctima:** `python3 -m http.server 8080`
-![[Screenshot_2026-05-19_20-11-58.png]]
+![a](./assets/Screenshot_2026-05-19_20-11-58.png)
 - **Atacante:** `wget http://192.168.1.13:8080/File.zip`
 ![5](./assets/Screenshot_2026-05-19_20-13-42.png)
 
