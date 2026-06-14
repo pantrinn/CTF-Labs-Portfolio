@@ -1,5 +1,5 @@
 
-![](./assets/ChatGPT Image 14 jun 2026, 13_30_51.png)
+![](./assets/portada.png)
 # 🌐 Yuan114: Writeup Técnico Completo
 
 **Resumen ejecutivo:** Esta máquina requirió una cadena de explotación que comenzó con un **reconocimiento exhaustivo usando NDiscover**, continuó con **enumeración web** (Gobuster + ffuf) para descubrir un **LFI (Local File Inclusion)** en file.php, lectura de archivos sensibles vía LFI (incluyendo /etc/passwd y procesos), abuso de permisos sudo del usuario welcome, y finalmente obtención de las flags.
