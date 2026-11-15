@@ -42,15 +42,15 @@ Este repositorio es mi "bitácora de batalla", donde documento el proceso detall
 
 No se trata solo de conseguir la flag; se trata de entender el **porqué** de la vulnerabilidad y cómo mitigarla. En mis write-ups no encontrarás solo comandos, sino la lógica detrás de cada paso, redactada de forma clara y directa.
 
-> _"La seguridad no es un producto, es un proceso... y a veces ese proceso incluye pelearse con los repositorios de Brave y el motor de búsqueda de qBittorrent."_
+> _"La seguridad no es un producto, es un proceso."_ — Bruce Schneier
 
 ---
 
 ## 📫 Contacto & Conexión
 
-Si te gusta lo que ves o quieres intercambiar técnicas de explotación (¡o de rol! 🎲):
+Si buscas un perfil de soporte IT, sistemas o ciberseguridad, o quieres intercambiar técnicas, escríbeme:
 
-- **LinkedIn:** www.linkedin.com/in/gonzalocastellano
+- **LinkedIn:** [linkedin.com/in/gonzaloccastellano](https://www.linkedin.com/in/gonzaloccastellano)
 
 - **Portfolio Web:** https://github.com/pantrinn
 
